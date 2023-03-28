@@ -1,6 +1,0 @@
-#! /bin/sh
-
-nano $1
-if [ -f $1 ]; then
-  chmod +x $1
-fi
