@@ -1,5 +1,10 @@
 #! /bin/sh
 
+if [ $# -ne 1 ]; then
+  echo 'get-material-icon: usage: \033[1mget-material-icon\033[0m \033[3micon-name\033[0m'
+  exit 1
+fi
+
 CACHEFILE=/home/$USER/.cache/get-material-icon-meta.json
 if [ -f $CACHEFILE ]; then
   TFILE=$(stat -c %Y -- $CACHEFILE)
@@ -14,7 +19,7 @@ fi
 VER=$(cat $CACHEFILE | grep -A 1 "\"name\": \"$1\"" | grep -oE '[0-9]+' | tail -1)
 if [ "$VER" = "" ]; then
   echo "get-material-icon: no icon with name \"$1\" found" >&2
-  exit 1
+  exit 2
 fi
 
 curl -s https://fonts.gstatic.com/s/i/materialicons/$1/v$VER/24px.svg
