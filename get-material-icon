@@ -1,0 +1,14 @@
+#! /bin/sh
+
+CACHEFILE=/home/$USER/.cache/get-material-icon-meta.json
+if [ -f $CACHEFILE ]; then
+  TFILE=$(stat -c %Y -- $CACHEFILE)
+  TNOW=$(date +%s)
+  if [ $((TNOW-TFILE)) -gt 10800 ]; then
+    curl -s 'https://fonts.google.com/metadata/icons?key=material_symbols&incomplete=true' > $CACHEFILE
+  fi
+else
+  curl -s 'https://fonts.google.com/metadata/icons?key=material_symbols&incomplete=true' > $CACHEFILE
+fi
+VER=$(cat $CACHEFILE | grep -A 1 "\"name\": \"$1\"" | grep -oE '[0-9]+' | tail -1)
+curl -s https://fonts.gstatic.com/s/i/materialicons/$1/v$VER/24px.svg
