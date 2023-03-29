@@ -1,0 +1,36 @@
+#! /bin/sh
+
+RESTART=false
+# check if firefox is running
+if fuser -s /opt/firefox-dev/firefox-bin; then
+  #echo "Please close Firefox Developer Edition before attempting to update the application"
+  #exit
+
+  echo "Firefox Developer Edition is currently running and will be restarted during the update."
+  read -p "Continue? [Y/n] " CONF
+  if [ "$CONF" = "y" ] || [ "$CONF" = "Y" ] || [ "$CONF" = "" ]; then
+    # kill
+    fuser -sk -SIGTERM /opt/firefox-dev/firefox-bin > /dev/null
+    RESTART=true
+  else
+    echo "Abort"
+    exit
+  fi
+fi
+
+# force sudo password
+sudo true
+
+# download and install (= copy all files)
+echo "Downloading the latest version of Firefox Developer Edition"
+cd /tmp
+sudo rm -frd firefox
+curl -L --raw "https://download.mozilla.org/?product=firefox-devedition-latest-ssl&os=linux64&lang=en-US" | sudo tar -x -j
+echo "Installing"
+sudo cp -RT firefox /opt/firefox-dev
+echo "Done"
+
+if $RESTART; then
+  echo "Restarting Firefox Developer Edition"
+  /opt/firefox-dev/firefox > /dev/null 2> /dev/null &
+fi
