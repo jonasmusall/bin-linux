@@ -32,5 +32,6 @@ echo "Done"
 
 if $RESTART; then
   echo "Restarting Firefox Developer Edition"
-  /opt/firefox-dev/firefox > /dev/null 2> /dev/null &
+  nohup /opt/firefox-dev/firefox > /dev/null 2> /dev/null &
+  sleep 1
 fi
