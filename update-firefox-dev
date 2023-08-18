@@ -1,5 +1,19 @@
 #! /bin/sh
 
+# check if more recent version is available
+# versioning scheme: <MILESTONE=[0-9]+> ".0b" <BUILD=[0-9]+>
+VER_REMOTE=$(curl -si "https://download.mozilla.org/?product=firefox-devedition-latest-ssl&os=linux64&lang=en-US" | grep "Location: " | grep -oP '/\K[0-9]+\.0b[0-9]+(?=/)')
+VER_LOCAL=$(/opt/firefox-dev/firefox --version | grep -oE '[0-9]+\.0b[0-9]+')
+VER_REMOTE_MILESTONE=$(echo "$VER_REMOTE" | grep -oP '[0-9]+(?=\.)')
+VER_REMOTE_BUILD=$(echo "$VER_REMOTE" | grep -oP '\.0b\K[0-9]+')
+VER_LOCAL_MILESTONE=$(echo "$VER_LOCAL" | grep -oP '[0-9]+(?=\.)')
+VER_LOCAL_BUILD=$(echo "$VER_LOCAL" | grep -oP '\.0b\K[0-9]+')
+if [ $VER_LOCAL_MILESTONE -gt $VER_REMOTE_MILESTONE ] || [ $VER_LOCAL_MILESTONE -eq $VER_REMOTE_MILESTONE -a $VER_LOCAL_BUILD -ge $VER_REMOTE_BUILD ]; then
+  echo "No update available from $VER_LOCAL to $VER_REMOTE"
+  exit
+fi
+echo "Update available from $VER_LOCAL to $VER_REMOTE"
+
 RESTART=false
 # check if firefox is running
 if fuser -s /opt/firefox-dev/firefox-bin; then
