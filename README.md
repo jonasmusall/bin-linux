@@ -29,4 +29,4 @@ serves the current director over http on port 8888
 ### `update-firefox-dev`
 since firefox developer edition can not update itself and there is no listing in an app store I use,
 I created this script to update my installation in `/opt/firefox-dev`. not particularly efficient
-(no delta update) and it doesn't check if installed version < available version, but it does the job.
+(no delta update).
