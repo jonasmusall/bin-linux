@@ -39,7 +39,7 @@ sudo true
 echo "Downloading the latest version of Firefox Developer Edition"
 cd /tmp
 sudo rm -frd firefox
-curl -L --raw "https://download.mozilla.org/?product=firefox-devedition-latest-ssl&os=linux64&lang=en-US" | sudo tar -x -j
+curl -L --progress-bar --raw "https://download.mozilla.org/?product=firefox-devedition-latest-ssl&os=linux64&lang=en-US" | sudo tar -x -j
 echo "Installing"
 sudo cp -RT firefox /opt/firefox-dev
 echo "Done"
